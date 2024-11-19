@@ -15,13 +15,8 @@ public class Student extends Person {
     private int indexNo;
     private int semester;
 
-    @ManyToMany
-    @JoinTable(
-            name = "student_subject",
-            joinColumns = @JoinColumn(name = "student_id"),
-            inverseJoinColumns = @JoinColumn(name = "subject_id")
-    )
-    private Set<Subject> subjects = new HashSet<>();
+    @OneToMany(mappedBy = "student")
+    private Set<Test> tests;
 
     protected Student() {}
 

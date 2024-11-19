@@ -18,8 +18,8 @@ public class Subject {
     @JoinColumn(name = "teacher_id")
     private Teacher teacher;
 
-    @ManyToMany(mappedBy = "subjects")
-    private Set<Student> students = new HashSet<>();
+    @OneToMany(mappedBy = "subject")
+    private Set<Test> tests;
 
     protected Subject() {}
 
