@@ -4,14 +4,27 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "Person")
-public class Person {
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+public abstract class Person {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     private String fName;
     private String sName;
     private String email;
+
+    @ManyToOne
+    @JoinColumn(name = "address_id")
+    private Addresses address;
+
+    public Addresses getAddress() {
+        return address;
+    }
+
+    public void setAddress(Addresses address) {
+        this.address = address;
+    }
 
     protected Person() {}
 

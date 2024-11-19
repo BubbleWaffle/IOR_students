@@ -2,6 +2,9 @@ package org.example.Models;
 
 import jakarta.persistence.*;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 @Table(name = "Subject")
 public class Subject {
@@ -10,6 +13,13 @@ public class Subject {
     private Long id;
 
     private String name;
+
+    @ManyToOne
+    @JoinColumn(name = "teacher_id")
+    private Teacher teacher;
+
+    @ManyToMany(mappedBy = "subjects")
+    private Set<Student> students = new HashSet<>();
 
     protected Subject() {}
 
@@ -25,5 +35,13 @@ public class Subject {
     }
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Teacher getTeacher() {
+        return teacher;
+    }
+
+    public void setTeacher(Teacher teacher) {
+        this.teacher = teacher;
     }
 }
