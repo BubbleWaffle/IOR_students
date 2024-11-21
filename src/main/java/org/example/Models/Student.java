@@ -2,8 +2,9 @@ package org.example.Models;
 
 import jakarta.persistence.*;
 
-import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+
 
 @Entity
 @Table(name = "Student")
@@ -15,8 +16,13 @@ public class Student extends Person {
     private int indexNo;
     private int semester;
 
+
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "fos_id")
+    private FieldOfStudy fieldOfStudy;
+
     @OneToMany(mappedBy = "student")
-    private Set<Test> tests;
+    private List<Test> tests;
 
     protected Student() {}
 
@@ -42,5 +48,12 @@ public class Student extends Person {
 
     public void setSemester(int semester) {
         this.semester = semester;
+    }
+    public FieldOfStudy getFieldOfStudy() {
+        return fieldOfStudy;
+    }
+
+    public void setFieldOfStudy(FieldOfStudy fieldOfStudy) {
+        this.fieldOfStudy = fieldOfStudy;
     }
 }

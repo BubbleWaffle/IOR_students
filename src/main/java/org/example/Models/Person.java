@@ -14,17 +14,9 @@ public abstract class Person {
     private String sName;
     private String email;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "address_id")
     private Addresses address;
-
-    public Addresses getAddress() {
-        return address;
-    }
-
-    public void setAddress(Addresses address) {
-        this.address = address;
-    }
 
     protected Person() {}
 
@@ -55,5 +47,11 @@ public abstract class Person {
     }
     public void setEmail(String email) {
         this.email = email;
+    }
+    public Addresses getAddress() {
+        return address;
+    }
+    public void setAddress(Addresses address) {
+        this.address = address;
     }
 }

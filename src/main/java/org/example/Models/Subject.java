@@ -2,7 +2,7 @@ package org.example.Models;
 
 import jakarta.persistence.*;
 
-import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -14,12 +14,11 @@ public class Subject {
 
     private String name;
 
-    @ManyToOne
-    @JoinColumn(name = "teacher_id")
-    private Teacher teacher;
+    @ManyToMany(mappedBy = "subjects")
+    private List<Teacher> teachers;
 
     @OneToMany(mappedBy = "subject")
-    private Set<Test> tests;
+    private List<Test> tests;
 
     protected Subject() {}
 
@@ -35,13 +34,5 @@ public class Subject {
     }
     public void setName(String name) {
         this.name = name;
-    }
-
-    public Teacher getTeacher() {
-        return teacher;
-    }
-
-    public void setTeacher(Teacher teacher) {
-        this.teacher = teacher;
     }
 }

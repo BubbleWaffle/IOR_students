@@ -3,6 +3,8 @@ package org.example.Models;
 import jakarta.persistence.*;
 
 import java.util.Date;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "FieldOfStudy")
@@ -13,6 +15,9 @@ public class FieldOfStudy {
 
     private String name;
     private String type;
+
+    @OneToMany(mappedBy = "fieldOfStudy")
+    private List<Student> students;
 
     protected FieldOfStudy() {}
 

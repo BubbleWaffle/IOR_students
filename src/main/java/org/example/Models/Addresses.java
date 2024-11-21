@@ -2,6 +2,8 @@ package org.example.Models;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "Addresses")
 public class Addresses {
@@ -13,6 +15,9 @@ public class Addresses {
     private String city;
     private String postalCode;
     private String street;
+
+    @OneToMany(mappedBy = "address")
+    private List<Person> people;
 
     protected Addresses() {}
 
