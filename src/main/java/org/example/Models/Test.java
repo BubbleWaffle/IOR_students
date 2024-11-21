@@ -15,11 +15,11 @@ public class Test {
     private double grade;
 
     @ManyToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "student_id")
+    @JoinColumn(name = "student_id", foreignKey = @ForeignKey( name = "Fk_test_student"))
     Student student;
 
     @ManyToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "subject_id")
+    @JoinColumn(name = "subject_id", foreignKey = @ForeignKey( name = "Fk_test_subjecy"))
     Subject subject;
 
     protected Test() {}

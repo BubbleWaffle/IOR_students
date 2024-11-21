@@ -4,10 +4,10 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "Person")
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public abstract class Person {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String fName;
@@ -15,7 +15,7 @@ public abstract class Person {
     private String email;
 
     @ManyToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "address_id")
+    @JoinColumn(name = "address_id", foreignKey = @ForeignKey( name = "Fk_person_address"))
     private Addresses address;
 
     protected Person() {}

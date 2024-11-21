@@ -2,37 +2,29 @@ package org.example.Models;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 
 @Entity
-@Table(name = "Student")
 public class Student extends Person {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
 
     private int indexNo;
     private int semester;
 
 
     @ManyToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "fos_id")
+    @JoinColumn(name = "fos_id", foreignKey = @ForeignKey( name = "Fk_fos"))
     private FieldOfStudy fieldOfStudy;
 
     @OneToMany(mappedBy = "student")
-    private List<Test> tests;
+    private List<Test> tests = new ArrayList<>();
 
     protected Student() {}
 
     public Student(int indexNo, int semester) {
         this.indexNo = indexNo;
         this.semester = semester;
-    }
-
-    public Long getId() {
-        return id;
     }
 
     public int getIndexNo() {

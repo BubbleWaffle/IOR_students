@@ -2,6 +2,7 @@ package org.example.Models;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -15,10 +16,10 @@ public class Subject {
     private String name;
 
     @ManyToMany(mappedBy = "subjects")
-    private List<Teacher> teachers;
+    private List<Teacher> teachers = new ArrayList<>();
 
     @OneToMany(mappedBy = "subject")
-    private List<Test> tests;
+    private List<Test> tests = new ArrayList<>();
 
     protected Subject() {}
 

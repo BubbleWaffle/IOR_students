@@ -2,16 +2,13 @@ package org.example.Models;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
 
 @Entity
-@Table(name = "Teacher")
 public class Teacher extends Person {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
 
     private String title;
 
@@ -21,7 +18,7 @@ public class Teacher extends Person {
             joinColumns = @JoinColumn(name = "teacher_id"),
             inverseJoinColumns = @JoinColumn(name = "subject_id")
     )
-    private List<Subject> subjects;
+    private List<Subject> subjects = new ArrayList<>();
 
     protected Teacher() {}
 
@@ -29,9 +26,6 @@ public class Teacher extends Person {
         this.title = title;
     }
 
-    public Long getId() {
-        return id;
-    }
     public String getTitle() {
         return title;
     }

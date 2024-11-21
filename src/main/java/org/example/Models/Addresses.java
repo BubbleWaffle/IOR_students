@@ -2,6 +2,7 @@ package org.example.Models;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -17,7 +18,7 @@ public class Addresses {
     private String street;
 
     @OneToMany(mappedBy = "address")
-    private List<Person> people;
+    private List<Person> people = new ArrayList<>();
 
     protected Addresses() {}
 
