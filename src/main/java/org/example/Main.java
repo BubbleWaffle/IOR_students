@@ -29,7 +29,7 @@ public class Main {
         em.persist(student);
 
         Subject math = new Subject("Matematyka");
-        math.setTeacher(teacher);
+        math.setTeachers(teacher);
         em.persist(math);
 
         Test test = new Test(new Date(), 4.5);

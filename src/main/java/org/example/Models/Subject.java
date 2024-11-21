@@ -35,4 +35,11 @@ public class Subject {
     public void setName(String name) {
         this.name = name;
     }
+    public List<Teacher> getTeachers() {
+        return teachers;
+    }
+
+    public void setTeachers(Teacher teacher) {
+        this.teachers.add(teacher);
+    }
 }
