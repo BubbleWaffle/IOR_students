@@ -10,18 +10,29 @@ import java.util.Date;
 
 public class Main {
     public static void main(String[] args) {
+
+        int switchValue = 3; //1 tworzenie bazy //2 wczytanie danych //3 zapytnaia
+
         EntityManager em = JPAUtil.getEntityManager();
         em.getTransaction().begin();
 
-        //DataLoad test = new DataLoad(em);
 
-        //em.getTransaction().commit();
+        if(switchValue == 2) {
+            DataLoad test = new DataLoad(em);
+        }
+        else if(switchValue == 3) {
+            JPQLQueries queries = new JPQLQueries();
 
-        JPQLQueries queries = new JPQLQueries();
-
-        queries.FirstQuery(em);
-        System.out.println("\n\n");
-        queries.SecondQuery(em);
+            System.out.println("JPQL queries:");
+            queries.FirstQuery(em);
+            System.out.println("\n\n");
+            queries.SecondQuery(em);
+            System.out.println("\n\n");
+            queries.ThridQuery(em);
+            System.out.println("\n\n");
+            System.out.println("Criteria queries");
+            queries.Criteria(em);
+        }
 
         em.getTransaction().commit();
         em.close();
