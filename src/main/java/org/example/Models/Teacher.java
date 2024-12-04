@@ -35,4 +35,10 @@ public class Teacher extends Person {
     public List<Subject> getSubjects() {
         return subjects;
     }
+    public void addSubject(Subject subject) {
+        if (!subjects.contains(subject)) { // Zapobieganie duplikatom
+            subjects.add(subject);
+            subject.getTeachers().add(this); // Aktualizacja relacji dwukierunkowej
+        }
+    }
 }

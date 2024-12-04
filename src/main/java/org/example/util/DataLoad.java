@@ -1,6 +1,9 @@
 package org.example.util;
 
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Root;
 import org.example.Models.*;
 
 import java.util.ArrayList;
@@ -9,10 +12,11 @@ import java.util.List;
 
 public class DataLoad {
 
+
     private EntityManager em;
 
-    public DataLoad(EntityManager emg) {
-        this.em = emg;
+    public DataLoad(EntityManager em) {
+        this.em = em;
         InitData();
     }
 
@@ -36,7 +40,6 @@ public class DataLoad {
     }
 
     private void LoadSubjectsAndTeachers() {
-        // Create subjects
         Subject math = new Subject("Mathematics");
         Subject physics = new Subject("Physics");
         Subject programming = new Subject("Programming");
@@ -45,14 +48,13 @@ public class DataLoad {
         em.persist(physics);
         em.persist(programming);
 
-        // Create teachers and assign subjects
         Teacher teacher1 = new Teacher("Dr.");
         teacher1.setfName("Antek");
         teacher1.setsName("Lark");
         teacher1.setEmail("AL@gmail.com");
-        teacher1.setAddress(em.find(Addresses.class, 2L)); // Assuming address with ID 2 exists
-        teacher1.getSubjects().add(math);
-        teacher1.getSubjects().add(physics);
+        teacher1.setAddress(em.find(Addresses.class, 2L));
+        teacher1.addSubject(math);
+        teacher1.addSubject(physics);
         em.persist(teacher1);
 
         Teacher teacher2 = new Teacher("Professor");
@@ -60,23 +62,16 @@ public class DataLoad {
         teacher2.setsName("Kowalska");
         teacher2.setEmail("MK@gmail.com");
         teacher2.setAddress(em.find(Addresses.class, 1L));
-        teacher2.getSubjects().add(programming);
+        teacher2.addSubject(programming);
         em.persist(teacher2);
-
-        // Update bidirectional relationship
-        math.getTeachers().add(teacher1);
-        physics.getTeachers().add(teacher1);
-        programming.getTeachers().add(teacher2);
     }
 
     private void LoadStudentsAndFieldsOfStudy() {
-        // Create fields of study
         FieldOfStudy informatics = new FieldOfStudy("Informatics", "S1");
         FieldOfStudy robotics = new FieldOfStudy("Robotics", "N1");
         em.persist(informatics);
         em.persist(robotics);
 
-        // Create students and assign fields of study
         Student student1 = new Student(101, 1);
         student1.setfName("Błażej");
         student1.setsName("Kubicius");
@@ -103,10 +98,16 @@ public class DataLoad {
     }
 
     private void LoadTests() {
-        // Assign tests to students
-        Student student1 = em.find(Student.class, 1L); // Assuming student with ID 1 exists
-        Student student2 = em.find(Student.class, 2L);
-        Subject math = em.find(Subject.class, 1L); // Assuming subject with ID 1 exists
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Student> query = cb.createQuery(Student.class);
+        Root<Student> root = query.from(Student.class);
+        query.select(root);
+        List<Student> students = em.createQuery(query).getResultList();
+
+        Student student1 = students.get(0);
+        Student student2 = students.get(1);
+
+        Subject math = em.find(Subject.class, 1L);
         Subject programming = em.find(Subject.class, 3L);
 
         Test test1 = new Test(new Date(), 4.5);
