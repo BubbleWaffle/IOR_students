@@ -4,78 +4,124 @@ import jakarta.persistence.EntityManager;
 import org.example.Models.*;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class DataLoad {
 
-    public EntityManager em;
+    private EntityManager em;
 
-    public DataLoad (EntityManager emg){
+    public DataLoad(EntityManager emg) {
         this.em = emg;
         InitData();
     }
 
-    public void InitData(){
-        LoadBase();
-        AddFieldsOfStudy();
+    public void InitData() {
+        LoadAddresses();
+        LoadSubjectsAndTeachers();
+        LoadStudentsAndFieldsOfStudy();
+        LoadTests();
     }
 
-    public void LoadBase(){
-        Addresses address = new Addresses("Italy", "Rome", "3-4", "Pickerina");
-        Addresses ad2 = new Addresses("Poland", "Bielsko-Białą", "54-111", "TestUlica");
-        Addresses ad3 = new Addresses("Poland", "Warszawa", "11-111", "Prosta");
+    private void LoadAddresses() {
+        Addresses address1 = new Addresses("Italy", "Rome", "3-4", "Pickerina");
+        Addresses address2 = new Addresses("Poland", "Bielsko-Biała", "54-111", "TestUlica");
+        Addresses address3 = new Addresses("Poland", "Warszawa", "11-111", "Prosta");
+        Addresses address4 = new Addresses("Germany", "Berlin", "44-999", "Hauptstrasse");
 
-        Student student = new Student(10, 10);
-        student.setfName("Błażej");
-        student.setsName("Kubicius");
-        student.setEmail("BeKa@gmail.com");
-        student.setAddress(ad2);
-        em.persist(student);
+        em.persist(address1);
+        em.persist(address2);
+        em.persist(address3);
+        em.persist(address4);
+    }
 
-        Student student2 = new Student(10, 10);
-        student2.setfName("Mikolaj");
-        student2.setsName("Desortes");
-        student2.setEmail("mail@gmail.com");
-        student2.setAddress(ad3);
-        em.persist(student2);
+    private void LoadSubjectsAndTeachers() {
+        // Create subjects
+        Subject math = new Subject("Mathematics");
+        Subject physics = new Subject("Physics");
+        Subject programming = new Subject("Programming");
 
-//        Student student3 = new Student(10, 10);
-//        student3.setfName("Mikolaj");
-//        student3.setsName("Desortes");
-//        student3.setEmail("mail@gmail.com");
-//        student.setAddress(ad2);
-//        em.persist(student3);
+        em.persist(math);
+        em.persist(physics);
+        em.persist(programming);
 
-        Teacher teacher = new Teacher("Doktor");
-        teacher.setfName("Antek");
-        teacher.setsName("Lark");
-        teacher.setEmail("AL@gmail.com");
-        teacher.setAddress(ad2);
-        em.persist(teacher);
+        // Create teachers and assign subjects
+        Teacher teacher1 = new Teacher("Dr.");
+        teacher1.setfName("Antek");
+        teacher1.setsName("Lark");
+        teacher1.setEmail("AL@gmail.com");
+        teacher1.setAddress(em.find(Addresses.class, 2L)); // Assuming address with ID 2 exists
+        teacher1.getSubjects().add(math);
+        teacher1.getSubjects().add(physics);
+        em.persist(teacher1);
 
-        Teacher teacher2 = new Teacher("Doktor");
-        teacher2.setfName("Test");
-        teacher2.setsName("Teacher");
-        teacher2.setEmail("ALT@gmail.com");
-        teacher2.setAddress(address);
+        Teacher teacher2 = new Teacher("Professor");
+        teacher2.setfName("Maria");
+        teacher2.setsName("Kowalska");
+        teacher2.setEmail("MK@gmail.com");
+        teacher2.setAddress(em.find(Addresses.class, 1L));
+        teacher2.getSubjects().add(programming);
         em.persist(teacher2);
 
-        Subject math = new Subject("Matematyka");
-        //math.setTeachers(teacher);
-        math.setTeachers(teacher2);
-        em.persist(math);
+        // Update bidirectional relationship
+        math.getTeachers().add(teacher1);
+        physics.getTeachers().add(teacher1);
+        programming.getTeachers().add(teacher2);
     }
 
-    public void AddFieldsOfStudy() {
-        List<FieldOfStudy> data = new ArrayList<>();
-        data.add(new FieldOfStudy("Informatics","S1"));
-        data.add(new FieldOfStudy("Informatics","N1"));
-        data.add(new FieldOfStudy("Robotics","S1"));
-        data.add(new FieldOfStudy("Robotics","N1"));
+    private void LoadStudentsAndFieldsOfStudy() {
+        // Create fields of study
+        FieldOfStudy informatics = new FieldOfStudy("Informatics", "S1");
+        FieldOfStudy robotics = new FieldOfStudy("Robotics", "N1");
+        em.persist(informatics);
+        em.persist(robotics);
 
-        for(int i = 0; i < data.size(); i++){
-            em.persist(data.get(i));
-        }
-        //em.persist(data);
+        // Create students and assign fields of study
+        Student student1 = new Student(101, 1);
+        student1.setfName("Błażej");
+        student1.setsName("Kubicius");
+        student1.setEmail("BeKa@gmail.com");
+        student1.setAddress(em.find(Addresses.class, 2L));
+        student1.setFieldOfStudy(informatics);
+        em.persist(student1);
+
+        Student student2 = new Student(102, 2);
+        student2.setfName("Mikołaj");
+        student2.setsName("Desortes");
+        student2.setEmail("mail@gmail.com");
+        student2.setAddress(em.find(Addresses.class, 3L));
+        student2.setFieldOfStudy(robotics);
+        em.persist(student2);
+
+        Student student3 = new Student(103, 3);
+        student3.setfName("Anna");
+        student3.setsName("Nowak");
+        student3.setEmail("anna.nowak@gmail.com");
+        student3.setAddress(em.find(Addresses.class, 4L));
+        student3.setFieldOfStudy(informatics);
+        em.persist(student3);
+    }
+
+    private void LoadTests() {
+        // Assign tests to students
+        Student student1 = em.find(Student.class, 1L); // Assuming student with ID 1 exists
+        Student student2 = em.find(Student.class, 2L);
+        Subject math = em.find(Subject.class, 1L); // Assuming subject with ID 1 exists
+        Subject programming = em.find(Subject.class, 3L);
+
+        Test test1 = new Test(new Date(), 4.5);
+        test1.setStudent(student1);
+        test1.setSubject(math);
+        em.persist(test1);
+
+        Test test2 = new Test(new Date(), 5.0);
+        test2.setStudent(student1);
+        test2.setSubject(programming);
+        em.persist(test2);
+
+        Test test3 = new Test(new Date(), 3.5);
+        test3.setStudent(student2);
+        test3.setSubject(math);
+        em.persist(test3);
     }
 }

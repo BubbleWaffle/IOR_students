@@ -32,4 +32,7 @@ public class Teacher extends Person {
     public void setTitle(String title) {
         this.title = title;
     }
+    public List<Subject> getSubjects() {
+        return subjects;
+    }
 }
