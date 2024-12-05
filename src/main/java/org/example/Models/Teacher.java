@@ -15,8 +15,8 @@ public class Teacher extends Person {
     @ManyToMany(cascade = CascadeType.PERSIST)
     @JoinTable(
             name = "Teacher_Subject",
-            joinColumns = @JoinColumn(name = "teacher_id"),
-            inverseJoinColumns = @JoinColumn(name = "subject_id")
+            joinColumns = @JoinColumn(name = "teacher_id", foreignKey = @ForeignKey( name = "Fk_teacher")),
+            inverseJoinColumns = @JoinColumn(name = "subject_id", foreignKey = @ForeignKey( name = "Fk_subject"))
     )
     private List<Subject> subjects = new ArrayList<>();
 
