@@ -10,11 +10,9 @@ import org.example.Models.*;
 import java.util.List;
 
 public class JPQLQueries {
-    String query1 = "SELECT p.fName, p.sName FROM Person p";
+    String query1 = "SELECT p.fName, p.sName FROM Person p WHERE p.fName LIKE 'M%'";
     String query2 =
-            "SELECT t.grade, p.fName, p.sName FROM Test t\n" +
-            "join\n" +
-            "Student p on p.id = t.student.id\n" +
+            "SELECT t.grade, t.student.fName, t.student.sName FROM Test t\n" +
             "WHERE t.grade > 4";
 
     String query3 = "SELECT t, COUNT(s) FROM Teacher t " +
